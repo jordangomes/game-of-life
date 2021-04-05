@@ -9,11 +9,27 @@
         <style>
             html,body {
                 margin: 0;
+                overflow: hidden;
             }
+            #buttons {
+                position: absolute;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                top: 10px;
+                right: 50px;
+                width: 150px 
+            }
+           
         </style>
 
     </head>
     <body>
+        <div id="buttons">
+            <button onclick="start()" id="start">start</button>
+            <button onclick="stop()" id="stop">stop</button>
+            <button onclick="step()" id="step">step</button>
+        </div>
         <canvas id="game-of-life"></canvas>
         <script src="gameOfLife.js"></script>
     </body>
