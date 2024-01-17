@@ -127,31 +127,40 @@ function registerClickListener(element, drag, click) {
         }
     }
 
-    element.addEventListener('mousedown', function(event) {
-        cursorStartPos.x = event.pageX
-        cursorStartPos.y = event.pageY
-        cursorDragPos.x = event.pageX
-        cursorDragPos.y = event.pageY
+    function startAction(event) {
+        cursorStartPos.x = event.pageX || event.touches[0].pageX
+        cursorStartPos.y = event.pageY || event.touches[0].pageY
+        cursorDragPos.x = event.pageX || event.touches[0].pageX
+        cursorDragPos.y = event.pageY || event.touches[0].pageY
         mousedown = true
         canvas.style.cursor = "pointer"
-    })
+    }
 
-    element.addEventListener('mousemove', function(event) {
+    function moveAction(event) {
         if (mousedown && !withinDelta(event)) {
-            drag(cursorDragPos, { x: event.pageX, y: event.pageY })
-            cursorDragPos.x = event.pageX
-            cursorDragPos.y = event.pageY
+            drag(cursorDragPos, { x: event.pageX || event.touches[0].pageX, y: event.pageY || event.touches[0].pageY })
+            cursorDragPos.x = event.pageX || event.touches[0].pageX
+            cursorDragPos.y = event.pageY || event.touches[0].pageY
             canvas.style.cursor = "grabbing"
         }
-    })
+    }
 
-    element.addEventListener('mouseup', function(event) {
+    function endAction(event) {
         if (withinDelta(event)) {
             click(event)
         }
         canvas.style.cursor = "auto"
         mousedown = false
-    })
+    }
+
+    element.addEventListener('mousedown', startAction)
+    element.addEventListener('mousemove', moveAction)
+    element.addEventListener('mouseup', endAction)
+
+    // Add touch events
+    element.addEventListener('touchstart', startAction)
+    element.addEventListener('touchmove', moveAction)
+    element.addEventListener('touchend', endAction)
 }
 
 // render current frame
